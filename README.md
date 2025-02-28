@@ -92,7 +92,6 @@ A powerful Telegram bot for managing your WooCommerce store directly from Telegr
 
 - ▶️ Start the bot with `/start` to see the welcome message.
 - ⚙️ Use `/settings` to configure notifications, language, and currency.
-- 📦 Run `/products` to list products, click "Variations for <ID>" for details.
 - 🆘 Explore other commands with `/help`.
 
 ---
