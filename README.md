@@ -54,7 +54,7 @@ A powerful Telegram bot for managing your WooCommerce store directly from Telegr
 
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/yourusername/woocommerce-telegram-bot.git
+   git clone https://github.com/MMahdiAsghari/woocommerce-telegram-bot.git
    cd woocommerce-telegram-bot
    ```
 
@@ -115,7 +115,7 @@ A powerful Telegram bot for managing your WooCommerce store directly from Telegr
 
 ## 💡 Suggest a Feature
 
-If you have an idea for a new feature or an improvement, feel free to open an issue or submit a pull request on [GitHub](https://github.com/yourusername/woocommerce-telegram-bot/issues). You can also contact the developer directly with your suggestions. 🚀
+If you have an idea for a new feature or an improvement, feel free to open an issue or submit a pull request on [GitHub](https://github.com/MMahdiAsghari/woocommerce-telegram-bot/issues). You can also contact the developer directly with your suggestions. 🚀
 
 ---
 
