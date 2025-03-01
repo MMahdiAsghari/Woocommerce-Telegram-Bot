@@ -391,12 +391,10 @@ def format_products(products, page=0, per_page=5, currency='USD'):
 
     message += f"Page {page + 1} of {total_pages}"
 
-    # Build the keyboard as a list of lists
     keyboard = []
     for product in product_subset:
         if product.get('type') == "variable":
             keyboard.append([InlineKeyboardButton(f"Variations for {product['id']}", callback_data=f"vars_{product['id']}")])
-    # Add pagination buttons as separate rows
     pagination_row = []
     if page > 0:
         pagination_row.append(InlineKeyboardButton("⏮ Previous", callback_data=f"products_{page-1}"))
@@ -601,7 +599,7 @@ def format_customer_details(customer, orders, currency='USD'):
 
     message += "**Order History:**\n"
     keyboard = []
-    for order in orders[:10]:
+    for order in orders[:10]:  # Limit to 10 orders for brevity
         total = order.get('total', 'N/A')
         status = order.get('status', 'N/A').capitalize()
         button_text = f"Order {order['id']} - {currency_symbol}{total} ({status})"
@@ -774,27 +772,72 @@ async def bulkupdate(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
     else:
         await update.message.reply_text("⚠️ Invalid type. Use: order_status, product_price, product_stock")
 
-# Define a /help command handler
+# Define an enhanced /help command handler
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Send a help message."""
+    """Send an improved help menu with categorized commands."""
     if not await check_admin(update, context):
         return
-    await update.message.reply_text(
-        "Available commands:\n"
-        "/start - Welcome message\n"
-        "/settings - Configure notifications and currency\n"
-        "/help - Show this message\n"
-        "/products - List all products with details\n"
-        "/search <query> - Search products by name or SKU\n"
-        "/update <product_id> <price> <stock> - Update product price and stock\n"
-        "/orders - View recent orders\n"
-        "/order <order_id> - View order details\n"
-        "/customers - List all customers\n"
-        "/customer <customer_id> - View customer details and order history\n"
-        "/stats - Show store statistics\n"
-        "/bulkupdate <type> <new_value> <id1> <id2> ... - Bulk update orders or products (type: order_status, product_price, product_stock)"
-    )
-    logger.info("Help command triggered.")
+    
+    lang = context.bot_data.get('language', 'en')
+    if lang == "en":
+        message = (
+            "📚 **WooCommerce Bot Help Menu**\n\n"
+            "Here’s a guide to all available commands:\n\n"
+            "---\n"
+            "**General Commands**\n"
+            "- `/start` - Displays the welcome message.\n"
+            "- `/help` - Shows this detailed help menu.\n"
+            "- `/settings` - Configure notifications, language, and currency.\n\n"
+            "---\n"
+            "**Product Management**\n"
+            "- `/products` - Lists all products with details and variation options.\n"
+            "- `/search <query>` - Searches products by name or SKU.\n"
+            "- `/update <product_id> <price> <stock>` - Updates price and stock (use '-' to skip).\n\n"
+            "---\n"
+            "**Order Management**\n"
+            "- `/orders` - Views recent orders with pagination.\n"
+            "- `/order <order_id>` - Shows detailed order information.\n"
+            "- `/bulkupdate <type> <new_value> <id1> <id2> ...` - Bulk updates orders or products (e.g., order_status, product_price).\n\n"
+            "---\n"
+            "**Customer Management**\n"
+            "- `/customers` - Lists all customers with spending and order stats.\n"
+            "- `/customer <customer_id>` - Views customer details and order history.\n\n"
+            "---\n"
+            "**Statistics**\n"
+            "- `/stats` - Displays store stats (orders, revenue, top product).\n\n"
+            "💡 **Tip:** Use `/settings` to customize your experience!"
+        )
+    else:  # Farsi
+        message = (
+            "📚 **منوی راهنمای ربات ووکامرس**\n\n"
+            "در اینجا راهنمای تمام دستورات موجود است:\n\n"
+            "---\n"
+            "**دستورات عمومی**\n"
+            "- `/start` - نمایش پیام خوش‌آمدگویی.\n"
+            "- `/help` - نمایش این منوی راهنمای دقیق.\n"
+            "- `/settings` - تنظیم اعلان‌ها، زبان و ارز.\n\n"
+            "---\n"
+            "**مدیریت محصولات**\n"
+            "- `/products` - فهرست همه محصولات با جزئیات و گزینه‌های تنوع.\n"
+            "- `/search <جستجو>` - جستجوی محصولات بر اساس نام یا SKU.\n"
+            "- `/update <شناسه_محصول> <قیمت> <موجودی>` - به‌روزرسانی قیمت و موجودی (از '-' برای رد شدن استفاده کنید).\n\n"
+            "---\n"
+            "**مدیریت سفارش‌ها**\n"
+            "- `/orders` - مشاهده سفارش‌های اخیر با صفحه‌بندی.\n"
+            "- `/order <شناسه_سفارش>` - نمایش اطلاعات دقیق سفارش.\n"
+            "- `/bulkupdate <نوع> <مقدار_جدید> <شناسه1> <شناسه2> ...` - به‌روزرسانی گروهی سفارش‌ها یا محصولات (مثلاً order_status, product_price).\n\n"
+            "---\n"
+            "**مدیریت مشتریان**\n"
+            "- `/customers` - فهرست همه مشتریان با آمار هزینه و سفارش‌ها.\n"
+            "- `/customer <شناسه_مشتری>` - مشاهده جزئیات مشتری و تاریخچه سفارش‌ها.\n\n"
+            "---\n"
+            "**آمار**\n"
+            "- `/stats` - نمایش آمار فروشگاه (سفارش‌ها، درآمد، محصول برتر).\n\n"
+            "💡 **نکته:** از `/settings` برای شخصی‌سازی تجربه خود استفاده کنید!"
+        )
+
+    await update.message.reply_text(message, parse_mode='Markdown')
+    logger.info("Help command triggered with enhanced menu.")
 
 # Define the enhanced /products command handler
 async def products(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
