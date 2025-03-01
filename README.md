@@ -67,6 +67,7 @@ A powerful Telegram bot for managing your WooCommerce store directly from Telegr
 3. **Install Dependencies:**
    ```bash
    pip install -r requirements.txt
+   pip install "python-telegram-bot[job-queue]==20.7"
    ```
 
 4. **Configure Environment Variables:**
